@@ -1,8 +1,6 @@
 package testutil
 
-import (
-	"github.com/sgrinan/runbeacon/internal/models"
-)
+import "github.com/sgrinan/runbeacon/internal/models"
 
 func ValidRunbook() models.Runbook {
 	return models.Runbook{

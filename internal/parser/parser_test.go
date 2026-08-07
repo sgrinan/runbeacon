@@ -9,7 +9,7 @@ import (
 )
 
 func TestParseValidYAML(t *testing.T) {
-	data, err := os.ReadFile("testdata/valid_runbook.yaml")
+	data, err := os.ReadFile("testdata/validYAML.yaml")
 	testutil.NoError(t, err, "ReadFile()")
 
 	got, err := Parse(data)
@@ -23,7 +23,7 @@ func TestParseValidYAML(t *testing.T) {
 }
 
 func TestParseInvalidYAML(t *testing.T) {
-	data, err := os.ReadFile("testdata/invalid_runbook.yaml")
+	data, err := os.ReadFile("testdata/invalidYAML.yaml")
 	testutil.NoError(t, err, "ReadFile()")
 
 	_, err = Parse(data)
@@ -33,7 +33,7 @@ func TestParseInvalidYAML(t *testing.T) {
 func TestLoadValidFile(t *testing.T) {
 	want := testutil.ValidRunbook()
 
-	got, err := Load("testdata/valid_runbook.yaml")
+	got, err := Load("testdata/validYAML.yaml")
 	testutil.NoError(t, err, "Load()")
 
 	if !reflect.DeepEqual(got, want) {
@@ -47,6 +47,6 @@ func TestLoadMissingFile(t *testing.T) {
 }
 
 func TestLoadInvalidYAML(t *testing.T) {
-	_, err := Load("testdata/invalid_runbook.yaml")
+	_, err := Load("testdata/invalidYAML.yaml")
 	testutil.ErrorContains(t, err, "Load()", "parse runbook YAML")
 }
