@@ -1,0 +1,16 @@
+id: kubernetes.pod.imagepullbackoff
+title: Pod in ImagePullBackOff
+description: Diagnose a pod that cannot pull its container image.
+
+symptoms:
+  - id: kubernetes.pod.image_pull
+    name: ImagePullBackOff
+    keywords:
+      - image
+      - pull
+      - registry
+
+steps:
+  - title: Check image
+    description: Verify the image name and registry access.
+    command: kubectl describe pod

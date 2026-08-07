@@ -1,0 +1,16 @@
+id: 
+title: Pod in CrashLoopBackOff
+description: Diagnose a repeatedly crashing pod.
+
+symptoms:
+  - id: kubernetes.pod.crash_loop
+    name: CrashLoopBackOff
+    keywords:
+      - crash
+      - restart
+      - backoff
+
+steps:
+  - title: Describe pod
+    description: Inspect pod events and container state.
+    command: kubectl describe pod
