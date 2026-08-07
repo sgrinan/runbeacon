@@ -1,36 +1,13 @@
 package parser
 
 import (
+	"os"
 	"reflect"
 	"strings"
 	"testing"
 
 	"github.com/sgrinan/runbeacon/internal/models"
 )
-
-const validRunbookYAML = `
-id: kubernetes.pod.crashloopbackoff
-title: Pod in CrashLoopBackOff
-description: Diagnose a repeatedly crashing pod.
-
-symptoms:
-  - id: kubernetes.pod.crash_loop
-    name: CrashLoopBackOff
-    keywords:
-      - crash
-      - restart
-      - backoff
-
-steps:
-  - title: Describe pod
-    description: Inspect pod events and container state.
-    command: kubectl describe pod
-`
-
-const invalidRunbookYAML = `
-id: kubernetes.pod.crashloopbackoff
-title: [
-`
 
 func validRunbook() models.Runbook {
 	return models.Runbook{
@@ -56,10 +33,13 @@ func validRunbook() models.Runbook {
 
 // TestParseValidYAML
 func TestParseValidYAML(t *testing.T) {
-	want := validRunbook()
+	data, err := os.ReadFile("testdata/valid_runbook.yaml")
+	assertNoError(t, err, "ReadFile()")
 
-	got, err := Parse([]byte(validRunbookYAML))
+	got, err := Parse(data)
 	assertNoError(t, err, "Parse()")
+
+	want := validRunbook()
 
 	if !reflect.DeepEqual(got, want) {
 		t.Fatalf("Parse() = %#v, want %#v", got, want)
@@ -68,12 +48,15 @@ func TestParseValidYAML(t *testing.T) {
 
 // TestParseInvalidYAML
 func TestParseInvalidYAML(t *testing.T) {
-	_, err := Parse([]byte(invalidRunbookYAML))
+	data, err := os.ReadFile("testdata/invalid_runbook.yaml")
+	assertNoError(t, err, "ReadFile()")
+
+	_, err = Parse(data)
 	assertErrorContains(t, err, "Parse()", "parse runbook YAML")
 }
 
 // TestLoadFile
-func TestLoadFile(t *testing.T) {
+func TestLoadValidFile(t *testing.T) {
 	want := validRunbook()
 
 	got, err := Load("testdata/valid_runbook.yaml")
