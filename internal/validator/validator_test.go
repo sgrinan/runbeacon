@@ -1,33 +1,11 @@
 package validator
 
 import (
-	"strings"
 	"testing"
 
 	"github.com/sgrinan/runbeacon/internal/models"
+	"github.com/sgrinan/runbeacon/internal/testutil"
 )
-
-func validRunbook() models.Runbook {
-	return models.Runbook{
-		ID:          "kubernetes.pod.crashloopbackoff",
-		Title:       "Pod in CrashLoopBackOff",
-		Description: "Diagnose a repeatedly crashing pod.",
-		Symptoms: []models.Symptom{
-			{
-				ID:       "kubernetes.pod.crash_loop",
-				Name:     "CrashLoopBackOff",
-				Keywords: []string{"crash", "restart", "backoff"},
-			},
-		},
-		Steps: []models.Step{
-			{
-				Title:       "Describe pod",
-				Description: "Inspect pod events and container state.",
-				Command:     "kubectl describe pod",
-			},
-		},
-	}
-}
 
 func TestValidate(t *testing.T) {
 	tests := []struct {
@@ -121,7 +99,7 @@ func TestValidate(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			runbook := validRunbook()
+			runbook := testutil.ValidRunbook()
 
 			if tt.modify != nil {
 				tt.modify(&runbook)
@@ -130,31 +108,11 @@ func TestValidate(t *testing.T) {
 			err := Validate(runbook)
 
 			if tt.wantErr == "" {
-				assertNoError(t, err, "Validate()")
+				testutil.NoError(t, err, "Validate()")
 				return
 			}
 
-			assertErrorContains(t, err, "Validate()", tt.wantErr)
+			testutil.ErrorContains(t, err, "Validate()", tt.wantErr)
 		})
-	}
-}
-
-func assertNoError(t *testing.T, err error, operation string) {
-	t.Helper()
-
-	if err != nil {
-		t.Fatalf("%s: %v", operation, err)
-	}
-}
-
-func assertErrorContains(t *testing.T, err error, operation string, want string) {
-	t.Helper()
-
-	if err == nil {
-		t.Fatalf("%s: want an error", operation)
-	}
-
-	if !strings.Contains(err.Error(), want) {
-		t.Fatalf("%s: error = %q, want it to contain %q", operation, err, want)
 	}
 }

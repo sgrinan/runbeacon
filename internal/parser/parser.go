@@ -8,7 +8,7 @@ import (
 	"go.yaml.in/yaml/v3"
 )
 
-// Parse
+// Parse parses YAML data into a Runbook.
 func Parse(data []byte) (models.Runbook, error) {
 	var runbook models.Runbook
 
@@ -19,7 +19,7 @@ func Parse(data []byte) (models.Runbook, error) {
 	return runbook, nil
 }
 
-// Load
+// Load reads a runbook from a YAML file and parses it.
 func Load(path string) (models.Runbook, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
