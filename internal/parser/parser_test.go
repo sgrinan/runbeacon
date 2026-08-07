@@ -32,10 +32,8 @@ id: kubernetes.pod.crashloopbackoff
 title: [
 `
 
-// TestParseValidYAML
-func TestParseValidYAML(t *testing.T) {
-
-	want := models.Runbook{
+func validRunbook() models.Runbook {
+	return models.Runbook{
 		ID:          "kubernetes.pod.crashloopbackoff",
 		Title:       "Pod in CrashLoopBackOff",
 		Description: "Diagnose a repeatedly crashing pod.",
@@ -54,12 +52,17 @@ func TestParseValidYAML(t *testing.T) {
 			},
 		},
 	}
+}
+
+// TestParseValidYAML
+func TestParseValidYAML(t *testing.T) {
+	want := validRunbook()
 
 	got, err := Parse([]byte(validRunbookYAML))
 	assertNoError(t, err, "Parse()")
 
 	if !reflect.DeepEqual(got, want) {
-		t.Errorf("Parse() = %#v, want %#v", got, want)
+		t.Fatalf("Parse() = %#v, want %#v", got, want)
 	}
 }
 
@@ -67,6 +70,30 @@ func TestParseValidYAML(t *testing.T) {
 func TestParseInvalidYAML(t *testing.T) {
 	_, err := Parse([]byte(invalidRunbookYAML))
 	assertErrorContains(t, err, "Parse()", "parse runbook YAML")
+}
+
+// TestLoadFile
+func TestLoadFile(t *testing.T) {
+	want := validRunbook()
+
+	got, err := Load("testdata/valid_runbook.yaml")
+	assertNoError(t, err, "Load()")
+
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("Load() = %#v, want %#v", got, want)
+	}
+}
+
+// TestLoadMissingFile
+func TestLoadMissingFile(t *testing.T) {
+	_, err := Load("testdata/missing.yaml")
+	assertErrorContains(t, err, "Load()", "read runbook file")
+}
+
+// TestLoadInvalidYAML
+func TestLoadInvalidYAML(t *testing.T) {
+	_, err := Load("testdata/invalid_runbook.yaml")
+	assertErrorContains(t, err, "Load()", "parse runbook YAML")
 }
 
 func assertNoError(t *testing.T, err error, operation string) {
