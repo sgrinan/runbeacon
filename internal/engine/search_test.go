@@ -74,15 +74,38 @@ func TestSearch(t *testing.T) {
 			wantIDs: []string{},
 		},
 		{
-			name:    "empty query",
-			query:   "",
-			wantIDs: []string{"kubernetes.pod.crashloopbackoff"},
+			name:  "empty query",
+			query: "",
+			wantIDs: []string{
+				"kubernetes.pod.crashloopbackoff",
+				"kubernetes.pod.pending",
+			},
+		},
+		{
+			name:  "matches multiples runbooks",
+			query: "pod",
+			wantIDs: []string{
+				"kubernetes.pod.crashloopbackoff",
+				"kubernetes.pod.pending",
+			},
 		},
 	}
 
 	catalog := Catalog{
 		Runbooks: []models.Runbook{
 			testutil.ValidRunbook(),
+			{
+				ID:          "kubernetes.pod.pending",
+				Title:       "Pod Pending",
+				Description: "Diagnose a pod stuck in Pending state.",
+				Symptoms: []models.Symptom{
+					{
+						ID:       "kubernetes.pod.pending",
+						Name:     "Pending",
+						Keywords: []string{"pod", "pending", "scheduling"},
+					},
+				},
+			},
 		},
 	}
 
