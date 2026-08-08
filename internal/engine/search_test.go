@@ -58,6 +58,26 @@ func TestSearch(t *testing.T) {
 			query:   "kubectl",
 			wantIDs: []string{"kubernetes.pod.crashloopbackoff"},
 		},
+		{
+			name:    "ignores case",
+			query:   "CRASHLOOPBACKOFF",
+			wantIDs: []string{"kubernetes.pod.crashloopbackoff"},
+		},
+		{
+			name:    "trims query spaces",
+			query:   "   restart   ",
+			wantIDs: []string{"kubernetes.pod.crashloopbackoff"},
+		},
+		{
+			name:    "no match",
+			query:   "network-timeout",
+			wantIDs: []string{},
+		},
+		{
+			name:    "empty query",
+			query:   "",
+			wantIDs: []string{"kubernetes.pod.crashloopbackoff"},
+		},
 	}
 
 	catalog := Catalog{
@@ -75,8 +95,10 @@ func TestSearch(t *testing.T) {
 				t.Fatalf("Search(%q) result count = %d, want %d", tt.query, len(got), len(tt.wantIDs))
 			}
 
-			if got[0].ID != tt.wantIDs[0] {
-				t.Fatalf("Search(%q) ID = %q, want %q", tt.query, got[0].ID, tt.wantIDs[0])
+			for i, wantID := range tt.wantIDs {
+				if got[i].ID != wantID {
+					t.Fatalf("Search(%q) result %d ID = %q, want %q", tt.query, i, got[i].ID, wantID)
+				}
 			}
 		})
 	}
