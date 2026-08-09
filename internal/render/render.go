@@ -7,6 +7,7 @@ import (
 	"github.com/sgrinan/runbeacon/internal/models"
 )
 
+// Runbook renders a runbook as plain text.
 func Runbook(runbook models.Runbook) string {
 	var builder strings.Builder
 	fmt.Fprintf(&builder, "%s\n", runbook.Title)
