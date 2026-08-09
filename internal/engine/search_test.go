@@ -3,7 +3,6 @@ package engine
 import (
 	"testing"
 
-	"github.com/sgrinan/runbeacon/internal/models"
 	"github.com/sgrinan/runbeacon/internal/testutil"
 )
 
@@ -44,9 +43,12 @@ func TestSearch(t *testing.T) {
 			wantIDs: []string{"kubernetes.pod.crashloopbackoff"},
 		},
 		{
-			name:    "matches steps title",
-			query:   "Describe pod",
-			wantIDs: []string{"kubernetes.pod.crashloopbackoff"},
+			name:  "matches steps title",
+			query: "Describe pod",
+			wantIDs: []string{
+				"kubernetes.pod.crashloopbackoff",
+				"kubernetes.pod.pending",
+			},
 		},
 		{
 			name:    "matches steps description",
@@ -54,9 +56,12 @@ func TestSearch(t *testing.T) {
 			wantIDs: []string{"kubernetes.pod.crashloopbackoff"},
 		},
 		{
-			name:    "matches steps command",
-			query:   "kubectl",
-			wantIDs: []string{"kubernetes.pod.crashloopbackoff"},
+			name:  "matches steps command",
+			query: "kubectl",
+			wantIDs: []string{
+				"kubernetes.pod.crashloopbackoff",
+				"kubernetes.pod.pending",
+			},
 		},
 		{
 			name:    "ignores case",
@@ -92,21 +97,7 @@ func TestSearch(t *testing.T) {
 	}
 
 	catalog := Catalog{
-		Runbooks: []models.Runbook{
-			testutil.ValidRunbook(),
-			{
-				ID:          "kubernetes.pod.pending",
-				Title:       "Pod Pending",
-				Description: "Diagnose a pod stuck in Pending state.",
-				Symptoms: []models.Symptom{
-					{
-						ID:       "kubernetes.pod.pending",
-						Name:     "Pending",
-						Keywords: []string{"pod", "pending", "scheduling"},
-					},
-				},
-			},
-		},
+		Runbooks: testutil.ValidRunbooks(),
 	}
 
 	for _, tt := range tests {

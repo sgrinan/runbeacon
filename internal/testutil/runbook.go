@@ -23,3 +23,32 @@ func ValidRunbook() models.Runbook {
 		},
 	}
 }
+
+func ValidPendingRunbook() models.Runbook {
+	return models.Runbook{
+		ID:          "kubernetes.pod.pending",
+		Title:       "Pod Pending",
+		Description: "Diagnose a pod stuck in Pending state.",
+		Symptoms: []models.Symptom{
+			{
+				ID:       "kubernetes.pod.pending",
+				Name:     "Pending",
+				Keywords: []string{"pod", "pending", "scheduling"},
+			},
+		},
+		Steps: []models.Step{
+			{
+				Title:       "Describe pod",
+				Description: "Inspect scheduling events.",
+				Command:     "kubectl describe pod",
+			},
+		},
+	}
+}
+
+func ValidRunbooks() []models.Runbook {
+	return []models.Runbook{
+		ValidRunbook(),
+		ValidPendingRunbook(),
+	}
+}
