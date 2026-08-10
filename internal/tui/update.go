@@ -1,11 +1,26 @@
 package tui
 
-import tea "charm.land/bubbletea/v2"
+import "charm.land/bubbletea/v2"
 
 // Update handles keyboard input and updates the model state.
 func (model Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
+	case tea.WindowSizeMsg:
+		model.viewport.SetHeight(msg.Height)
+		model.viewport.SetWidth(msg.Width)
+
 	case tea.KeyPressMsg:
+		if model.selected != nil {
+			var cmd tea.Cmd
+			model.viewport, cmd = model.viewport.Update(msg)
+
+			if msg.Code == tea.KeyEsc {
+				model.selected = nil
+			}
+
+			return model, cmd
+		}
+
 		if msg.String() == "ctrl+c" {
 			return model, tea.Quit
 		}
@@ -39,11 +54,8 @@ func (model Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if msg.Code == tea.KeyEnter {
 			if len(model.results) > 0 {
 				model.selected = &model.results[model.cursor]
+				model.viewport.SetContent(model.runbookView())
 			}
-		}
-
-		if msg.Code == tea.KeyEsc {
-			model.selected = nil
 		}
 	}
 

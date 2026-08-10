@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	tea "charm.land/bubbletea/v2"
+	"charm.land/bubbletea/v2"
 
 	"github.com/sgrinan/runbeacon/internal/render"
 )
@@ -12,7 +12,7 @@ import (
 // View renders the current model state.
 func (model Model) View() tea.View {
 	if model.selected != nil {
-		return tea.NewView(model.runbookView())
+		return tea.NewView(model.viewport.View())
 	}
 
 	return tea.NewView(model.searchView())

@@ -1,7 +1,8 @@
 package tui
 
 import (
-	tea "charm.land/bubbletea/v2"
+	"charm.land/bubbles/v2/viewport"
+	"charm.land/bubbletea/v2"
 
 	"github.com/sgrinan/runbeacon/internal/engine"
 	"github.com/sgrinan/runbeacon/internal/models"
@@ -14,6 +15,7 @@ type Model struct {
 	results  []models.Runbook
 	cursor   int
 	selected *models.Runbook
+	viewport viewport.Model
 }
 
 // NewModel creates a model with all runbooks initially visible.
@@ -24,6 +26,7 @@ func NewModel(catalog engine.Catalog) Model {
 		results:  catalog.Search(""),
 		cursor:   0,
 		selected: nil,
+		viewport: viewport.New(),
 	}
 }
 
