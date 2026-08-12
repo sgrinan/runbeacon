@@ -18,13 +18,6 @@ func TestRun(t *testing.T) {
 		wantStderr string
 	}{
 		{
-			name:       "no arguments",
-			args:       []string{},
-			wantCode:   2,
-			wantStdout: "",
-			wantStderr: "usage: runbeacon <command>\n",
-		},
-		{
 			name:       "unknown command",
 			args:       []string{"banana"},
 			wantCode:   2,

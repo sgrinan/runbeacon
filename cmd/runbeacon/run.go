@@ -4,13 +4,15 @@ import (
 	"fmt"
 	"io"
 
+	tea "charm.land/bubbletea/v2"
+
 	"github.com/sgrinan/runbeacon/internal/engine"
+	"github.com/sgrinan/runbeacon/internal/tui"
 )
 
 func run(args []string, stdout io.Writer, stderr io.Writer, catalog engine.Catalog) int {
 	if len(args) == 0 {
-		fmt.Fprintln(stderr, "usage: runbeacon <command>")
-		return 2
+		return runTUI(stdout, stderr, catalog)
 	}
 
 	switch args[0] {
@@ -20,6 +22,22 @@ func run(args []string, stdout io.Writer, stderr io.Writer, catalog engine.Catal
 		fmt.Fprintf(stderr, "unknown command: %s\n", args[0])
 		return 2
 	}
+}
+
+func runTUI(stdout io.Writer, stderr io.Writer, catalog engine.Catalog) int {
+	model := tui.NewModel(catalog)
+
+	program := tea.NewProgram(
+		model,
+		tea.WithOutput(stdout),
+	)
+
+	if _, err := program.Run(); err != nil {
+		fmt.Fprintf(stderr, "tui: %v\n", err)
+		return 1
+	}
+
+	return 0
 }
 
 func runSearch(args []string, stdout io.Writer, stderr io.Writer, catalog engine.Catalog) int {
