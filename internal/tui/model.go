@@ -1,6 +1,7 @@
 package tui
 
 import (
+	"charm.land/bubbles/v2/list"
 	"charm.land/bubbles/v2/viewport"
 	"charm.land/bubbletea/v2"
 
@@ -10,22 +11,26 @@ import (
 
 // Model holds the state of the interactive runbook search.
 type Model struct {
-	catalog  engine.Catalog
-	query    string
-	results  []models.Runbook
-	cursor   int
 	selected *models.Runbook
+	list     list.Model
 	viewport viewport.Model
 }
 
 // NewModel creates a model with all runbooks initially visible.
 func NewModel(catalog engine.Catalog) Model {
+	items := make([]list.Item, 0, len(catalog.Runbooks))
+
+	for _, runbook := range catalog.Runbooks {
+		items = append(items, runbookItem{
+			runbook: runbook,
+		})
+	}
+
+	runbookList := list.New(items, list.NewDefaultDelegate(), 0, 0)
+
 	return Model{
-		catalog:  catalog,
-		query:    "",
-		results:  catalog.Search(""),
-		cursor:   0,
 		selected: nil,
+		list:     runbookList,
 		viewport: viewport.New(),
 	}
 }

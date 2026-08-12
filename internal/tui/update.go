@@ -6,10 +6,15 @@ import "charm.land/bubbletea/v2"
 func (model Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
-		model.viewport.SetHeight(msg.Height)
+		model.list.SetSize(msg.Width, msg.Height)
 		model.viewport.SetWidth(msg.Width)
+		model.viewport.SetHeight(msg.Height)
 
 	case tea.KeyPressMsg:
+		if msg.String() == "ctrl+c" {
+			return model, tea.Quit
+		}
+
 		if model.selected != nil {
 			var cmd tea.Cmd
 			model.viewport, cmd = model.viewport.Update(msg)
@@ -21,42 +26,20 @@ func (model Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return model, cmd
 		}
 
-		if msg.String() == "ctrl+c" {
-			return model, tea.Quit
-		}
-
-		if msg.Code == tea.KeyDown {
-			if model.cursor < len(model.results)-1 {
-				model.cursor++
-			}
-		}
-
-		if msg.Code == tea.KeyUp {
-			if model.cursor > 0 {
-				model.cursor--
-			}
-		}
-
-		if msg.Text != "" {
-			model.query += msg.Text
-			model.results = model.catalog.Search(model.query)
-			model.cursor = 0
-		}
-
-		if msg.Code == tea.KeyBackspace {
-			if len(model.query) > 0 {
-				model.query = model.query[:len(model.query)-1]
-				model.results = model.catalog.Search(model.query)
-				model.cursor = 0
-			}
-		}
-
 		if msg.Code == tea.KeyEnter {
-			if len(model.results) > 0 {
-				model.selected = &model.results[model.cursor]
+			item, ok := model.list.SelectedItem().(runbookItem)
+			if ok {
+				model.selected = &item.runbook
 				model.viewport.SetContent(model.runbookView())
 			}
+
+			return model, nil
 		}
+
+		var cmd tea.Cmd
+		model.list, cmd = model.list.Update(msg)
+
+		return model, cmd
 	}
 
 	return model, nil

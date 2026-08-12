@@ -1,9 +1,6 @@
 package tui
 
 import (
-	"fmt"
-	"strings"
-
 	"charm.land/bubbletea/v2"
 
 	"github.com/sgrinan/runbeacon/internal/render"
@@ -15,23 +12,7 @@ func (model Model) View() tea.View {
 		return tea.NewView(model.viewport.View())
 	}
 
-	return tea.NewView(model.searchView())
-}
-
-func (model Model) searchView() string {
-	var builder strings.Builder
-
-	fmt.Fprintf(&builder, "Search: %s\n\n", model.query)
-
-	for i, runbook := range model.results {
-		if i == model.cursor {
-			fmt.Fprintf(&builder, ">  %s\n", runbook.Title)
-		} else {
-			fmt.Fprintf(&builder, "   %s\n", runbook.Title)
-		}
-	}
-
-	return builder.String()
+	return tea.NewView(model.list.View())
 }
 
 func (model Model) runbookView() string {
