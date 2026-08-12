@@ -1,0 +1,16 @@
+id: kubernetes.pod.pending
+title: Pod stuck in Pending
+description: Diagnose a pod that remains in the Pending state.
+
+symptoms:
+  - id: kubernetes.pod.pending
+    name: Pending
+    keywords:
+      - pending
+      - scheduling
+      - unschedulable
+
+steps:
+  - title: Describe pod
+    description: Inspect pod events and scheduling failures.
+    command: kubectl describe pod
