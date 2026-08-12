@@ -15,18 +15,15 @@ func (model Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return model, tea.Quit
 		}
 
-		if model.selected != nil {
-			var cmd tea.Cmd
-			model.viewport, cmd = model.viewport.Update(msg)
-
-			if msg.Code == tea.KeyEsc {
-				model.selected = nil
-			}
-
-			return model, cmd
+		if model.selected != nil && msg.Code == tea.KeyEsc {
+			model.selected = nil
+			return model, nil
 		}
 
-		if msg.Code == tea.KeyEnter {
+		if model.selected == nil &&
+			!model.list.SettingFilter() &&
+			msg.Code == tea.KeyEnter {
+
 			item, ok := model.list.SelectedItem().(runbookItem)
 			if ok {
 				model.selected = &item.runbook
@@ -35,12 +32,15 @@ func (model Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 			return model, nil
 		}
+	}
 
+	if model.selected != nil {
 		var cmd tea.Cmd
-		model.list, cmd = model.list.Update(msg)
-
+		model.viewport, cmd = model.viewport.Update(msg)
 		return model, cmd
 	}
 
-	return model, nil
+	var cmd tea.Cmd
+	model.list, cmd = model.list.Update(msg)
+	return model, cmd
 }
