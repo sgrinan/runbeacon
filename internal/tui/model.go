@@ -3,7 +3,7 @@ package tui
 import (
 	"charm.land/bubbles/v2/list"
 	"charm.land/bubbles/v2/viewport"
-	"charm.land/bubbletea/v2"
+	tea "charm.land/bubbletea/v2"
 
 	"github.com/sgrinan/runbeacon/internal/engine"
 	"github.com/sgrinan/runbeacon/internal/models"

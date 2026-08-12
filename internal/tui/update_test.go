@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"charm.land/bubbletea/v2"
+	tea "charm.land/bubbletea/v2"
 
 	"github.com/sgrinan/runbeacon/internal/engine"
 	"github.com/sgrinan/runbeacon/internal/testutil"
