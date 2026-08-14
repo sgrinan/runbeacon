@@ -124,8 +124,8 @@ func TestUpdateUpdatesComponentSizes(t *testing.T) {
 		t.Fatalf("Update() viewport width = %d, want %d", updated.viewport.Width(), 120)
 	}
 
-	if updated.viewport.Height() != 40 {
-		t.Fatalf("Update() viewport height = %d, want %d", updated.viewport.Height(), 40)
+	if updated.viewport.Height() != 39 {
+		t.Fatalf("Update() viewport height = %d, want %d", updated.viewport.Height(), 39)
 	}
 
 	if updated.list.Width() != 120 {

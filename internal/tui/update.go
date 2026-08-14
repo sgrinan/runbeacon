@@ -8,7 +8,9 @@ func (model Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		model.list.SetSize(msg.Width, msg.Height)
 		model.viewport.SetWidth(msg.Width)
-		model.viewport.SetHeight(msg.Height)
+
+		height := max(0, msg.Height-1)
+		model.viewport.SetHeight(height)
 
 	case tea.KeyPressMsg:
 		if msg.String() == "ctrl+c" {

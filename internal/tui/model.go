@@ -1,6 +1,7 @@
 package tui
 
 import (
+	"charm.land/bubbles/v2/key"
 	"charm.land/bubbles/v2/list"
 	"charm.land/bubbles/v2/viewport"
 	tea "charm.land/bubbletea/v2"
@@ -27,7 +28,22 @@ func NewModel(catalog engine.Catalog) Model {
 	}
 
 	runbookList := list.New(items, list.NewDefaultDelegate(), 0, 0)
+
+	runbookList.Title = "Runbeacon"
 	runbookList.Filter = filterRunbooks
+
+	openKey := key.NewBinding(
+		key.WithKeys("enter"),
+		key.WithHelp("enter", "open"),
+	)
+
+	runbookList.AdditionalShortHelpKeys = func() []key.Binding {
+		return []key.Binding{openKey}
+	}
+
+	runbookList.AdditionalFullHelpKeys = func() []key.Binding {
+		return []key.Binding{openKey}
+	}
 
 	return Model{
 		selected: nil,
