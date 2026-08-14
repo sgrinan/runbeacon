@@ -26,7 +26,9 @@ func renderRunbook(runbook models.Runbook) string {
 	fmt.Fprintf(&builder, "%s\n", sectionStyle.Render("Steps"))
 
 	for i, step := range runbook.Steps {
-		fmt.Fprintf(&builder, "%d. %s\n", i+1, step.Title)
+		stepTitle := fmt.Sprintf("%d. %s", i+1, step.Title)
+
+		fmt.Fprintf(&builder, "%s\n", stepTitleStyle.Render(stepTitle))
 		fmt.Fprintf(&builder, "   %s\n", mutedStyle.Render(step.Description))
 
 		if step.Command != "" {

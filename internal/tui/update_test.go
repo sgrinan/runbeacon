@@ -109,10 +109,10 @@ func TestUpdateUpdatesComponentSizes(t *testing.T) {
 	)
 	updated := requireModel(t, updatedModel)
 
-	testutil.Equal(t, updated.viewport.Width(), 120, "Update() viewport width")
-	testutil.Equal(t, updated.viewport.Height(), 39, "Update() viewport height")
-	testutil.Equal(t, updated.list.Width(), 120, "Update() list width")
-	testutil.Equal(t, updated.list.Height(), 40, "Update() list height")
+	testutil.Equal(t, updated.viewport.Width(), 116, "Update() viewport width")
+	testutil.Equal(t, updated.viewport.Height(), 37, "Update() viewport height")
+	testutil.Equal(t, updated.list.Width(), 116, "Update() list width")
+	testutil.Equal(t, updated.list.Height(), 38, "Update() list height")
 }
 
 func TestUpdateLoadsRunbookIntoViewport(t *testing.T) {

@@ -3,6 +3,12 @@ package tui
 import "charm.land/lipgloss/v2"
 
 var (
+	appStyle = lipgloss.NewStyle().
+			Padding(1, 2)
+
+	stepTitleStyle = lipgloss.NewStyle().
+			Bold(true)
+
 	titleStyle = lipgloss.NewStyle().
 			Bold(true).
 			Foreground(lipgloss.Color("205"))

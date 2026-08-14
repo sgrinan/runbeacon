@@ -11,8 +11,8 @@ func (model Model) View() tea.View {
 			"\n" +
 			helpStyle.Render(runbookHelp)
 
-		return tea.NewView(content)
+		return tea.NewView(appStyle.Render(content))
 	}
 
-	return tea.NewView(model.list.View())
+	return tea.NewView(appStyle.Render(model.list.View()))
 }
