@@ -27,6 +27,7 @@ func NewModel(catalog engine.Catalog) Model {
 	}
 
 	runbookList := list.New(items, list.NewDefaultDelegate(), 0, 0)
+	runbookList.Filter = filterRunbooks
 
 	return Model{
 		selected: nil,

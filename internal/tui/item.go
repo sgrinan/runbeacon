@@ -1,6 +1,10 @@
 package tui
 
-import "github.com/sgrinan/runbeacon/internal/models"
+import (
+	"strings"
+
+	"github.com/sgrinan/runbeacon/internal/models"
+)
 
 type runbookItem struct {
 	runbook models.Runbook
@@ -15,5 +19,16 @@ func (item runbookItem) Description() string {
 }
 
 func (item runbookItem) FilterValue() string {
-	return item.runbook.Title
+	var terms []string
+
+	terms = append(terms, item.runbook.Title)
+	terms = append(terms, item.runbook.ID)
+	terms = append(terms, item.runbook.Description)
+
+	for _, symptom := range item.runbook.Symptoms {
+		terms = append(terms, symptom.Name)
+		terms = append(terms, symptom.Keywords...)
+	}
+
+	return strings.Join(terms, " ")
 }
