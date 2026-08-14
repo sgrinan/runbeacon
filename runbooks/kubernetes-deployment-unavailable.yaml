@@ -1,0 +1,29 @@
+id: kubernetes.deployment.unavailable
+title: Deployment unavailable
+description: Diagnose a Deployment that does not have the expected number of available replicas.
+
+symptoms:
+  - id: kubernetes.deployment.unavailable
+    name: Unavailable replicas
+    keywords:
+      - deployment
+      - unavailable
+      - replicas
+      - rollout
+
+steps:
+  - title: Inspect deployment
+    description: Review replica counts, conditions, and rollout status.
+    command: kubectl describe deployment
+
+  - title: Check rollout status
+    description: Inspect whether the Deployment rollout is progressing successfully.
+    command: kubectl rollout status deployment
+
+  - title: Inspect replica sets
+    description: Review ReplicaSets associated with the Deployment.
+    command: kubectl get replicasets
+
+  - title: Inspect pods
+    description: Check the status of pods managed by the Deployment.
+    command: kubectl get pods

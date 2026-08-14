@@ -1,6 +1,6 @@
 id: kubernetes.pod.imagepullbackoff
 title: Pod in ImagePullBackOff
-description: Diagnose a pod that cannot pull its container image.
+description: Diagnose a pod whose container image cannot be pulled.
 
 symptoms:
   - id: kubernetes.pod.image_pull
@@ -9,8 +9,21 @@ symptoms:
       - image
       - pull
       - registry
+      - container
 
 steps:
   - title: Describe pod
-    description: Inspect pod events for image pull failures.
+    description: Inspect pod events for image pull errors.
     command: kubectl describe pod
+
+  - title: Inspect pod image
+    description: Verify the image name and tag configured for the pod.
+    command: kubectl get pod -o yaml
+
+  - title: Check registry credentials
+    description: Verify the image pull secrets configured for the pod.
+    command: kubectl get pod -o jsonpath='{.spec.imagePullSecrets}'
+
+  - title: Inspect image pull secrets
+    description: Verify that the referenced registry secrets exist.
+    command: kubectl get secrets

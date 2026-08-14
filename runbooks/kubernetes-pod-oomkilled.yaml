@@ -1,6 +1,6 @@
 id: kubernetes.pod.oomkilled
 title: Pod terminated with OOMKilled
-description: Diagnose a container terminated because it exceeded its memory limit.
+description: Diagnose a container terminated because it exceeded its available memory.
 
 symptoms:
   - id: kubernetes.pod.oom_killed
@@ -9,8 +9,21 @@ symptoms:
       - oom
       - memory
       - killed
+      - container
 
 steps:
   - title: Describe pod
     description: Inspect the container state and termination reason.
     command: kubectl describe pod
+
+  - title: Inspect resource configuration
+    description: Review the memory requests and limits configured for the pod.
+    command: kubectl get pod -o yaml
+
+  - title: Check current memory usage
+    description: Inspect current CPU and memory consumption for the pod.
+    command: kubectl top pod
+
+  - title: Check node memory
+    description: Inspect node memory pressure and allocated resources.
+    command: kubectl describe node

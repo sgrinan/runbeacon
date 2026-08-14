@@ -1,0 +1,29 @@
+id: kubernetes.service.no_endpoints
+title: Service has no endpoints
+description: Diagnose a Service that is not routing traffic to any pods.
+
+symptoms:
+  - id: kubernetes.service.no_endpoints
+    name: No service endpoints
+    keywords:
+      - service
+      - endpoints
+      - selector
+      - traffic
+
+steps:
+  - title: Inspect service
+    description: Review the Service selector, ports, and configuration.
+    command: kubectl describe service
+
+  - title: Check endpoints
+    description: Verify whether endpoints have been created for the Service.
+    command: kubectl get endpoints
+
+  - title: Inspect endpoint slices
+    description: Review EndpointSlices associated with the Service.
+    command: kubectl get endpointslices
+
+  - title: Check matching pods
+    description: Verify that running pods match the labels expected by the Service selector.
+    command: kubectl get pods --show-labels

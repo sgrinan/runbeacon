@@ -9,8 +9,21 @@ symptoms:
       - pending
       - scheduling
       - unschedulable
+      - scheduler
 
 steps:
   - title: Describe pod
-    description: Inspect pod events and scheduling failures.
+    description: Inspect pod events for scheduling failures.
     command: kubectl describe pod
+
+  - title: Inspect pod requirements
+    description: Review resource requests, node selectors, affinity, and tolerations.
+    command: kubectl get pod -o yaml
+
+  - title: Inspect nodes
+    description: Check node status, labels, and scheduling availability.
+    command: kubectl get nodes --show-labels
+
+  - title: Inspect node resources
+    description: Review node capacity, allocated resources, taints, and conditions.
+    command: kubectl describe node
