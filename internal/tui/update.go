@@ -27,7 +27,7 @@ func (model Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			item, ok := model.list.SelectedItem().(runbookItem)
 			if ok {
 				model.selected = &item.runbook
-				model.viewport.SetContent(model.runbookView())
+				model.viewport.SetContent(renderRunbook(item.runbook))
 			}
 			return model, nil
 		}
