@@ -13,7 +13,7 @@ func TestSearch(t *testing.T) {
 		wantIDs []string
 	}{
 		{
-			name:    "matches id",
+			name:    "matches ID",
 			query:   "pod.crashloop",
 			wantIDs: []string{"kubernetes.pod.crashloopbackoff"},
 		},
@@ -28,40 +28,19 @@ func TestSearch(t *testing.T) {
 			wantIDs: []string{"kubernetes.pod.crashloopbackoff"},
 		},
 		{
-			name:    "matches symptoms id",
+			name:    "matches symptom ID",
 			query:   "crash_loop",
 			wantIDs: []string{"kubernetes.pod.crashloopbackoff"},
 		},
 		{
-			name:    "matches symptoms name",
+			name:    "matches symptom name",
 			query:   "CrashLoopBackOff",
 			wantIDs: []string{"kubernetes.pod.crashloopbackoff"},
 		},
 		{
-			name:    "matches symptoms keyword",
+			name:    "matches symptom keyword",
 			query:   "restart",
 			wantIDs: []string{"kubernetes.pod.crashloopbackoff"},
-		},
-		{
-			name:  "matches steps title",
-			query: "Describe pod",
-			wantIDs: []string{
-				"kubernetes.pod.crashloopbackoff",
-				"kubernetes.pod.pending",
-			},
-		},
-		{
-			name:    "matches steps description",
-			query:   "Inspect pod",
-			wantIDs: []string{"kubernetes.pod.crashloopbackoff"},
-		},
-		{
-			name:  "matches steps command",
-			query: "kubectl",
-			wantIDs: []string{
-				"kubernetes.pod.crashloopbackoff",
-				"kubernetes.pod.pending",
-			},
 		},
 		{
 			name:    "ignores case",
@@ -87,7 +66,7 @@ func TestSearch(t *testing.T) {
 			},
 		},
 		{
-			name:  "matches multiples runbooks",
+			name:  "matches multiple runbooks",
 			query: "pod",
 			wantIDs: []string{
 				"kubernetes.pod.crashloopbackoff",
@@ -97,23 +76,19 @@ func TestSearch(t *testing.T) {
 	}
 
 	catalog := Catalog{
-		Runbooks: testutil.ValidRunbooks(),
+		Runbooks: testutil.Runbooks(),
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-
 			got := catalog.Search(tt.query)
 
-			if len(got) != len(tt.wantIDs) {
-				t.Fatalf("Search(%q) result count = %d, want %d", tt.query, len(got), len(tt.wantIDs))
+			gotIDs := make([]string, 0, len(got))
+			for _, runbook := range got {
+				gotIDs = append(gotIDs, runbook.ID)
 			}
 
-			for i, wantID := range tt.wantIDs {
-				if got[i].ID != wantID {
-					t.Fatalf("Search(%q) result %d ID = %q, want %q", tt.query, i, got[i].ID, wantID)
-				}
-			}
+			testutil.DeepEqual(t, gotIDs, tt.wantIDs, "Search() result IDs")
 		})
 	}
 }

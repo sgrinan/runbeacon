@@ -2,7 +2,7 @@ package testutil
 
 import "github.com/sgrinan/runbeacon/internal/models"
 
-func ValidRunbook() models.Runbook {
+func CrashLoopBackOffRunbook() models.Runbook {
 	return models.Runbook{
 		ID:          "kubernetes.pod.crashloopbackoff",
 		Title:       "Pod in CrashLoopBackOff",
@@ -24,7 +24,7 @@ func ValidRunbook() models.Runbook {
 	}
 }
 
-func ValidPendingRunbook() models.Runbook {
+func PendingRunbook() models.Runbook {
 	return models.Runbook{
 		ID:          "kubernetes.pod.pending",
 		Title:       "Pod Pending",
@@ -46,9 +46,9 @@ func ValidPendingRunbook() models.Runbook {
 	}
 }
 
-func ValidRunbooks() []models.Runbook {
+func Runbooks() []models.Runbook {
 	return []models.Runbook{
-		ValidRunbook(),
-		ValidPendingRunbook(),
+		CrashLoopBackOffRunbook(),
+		PendingRunbook(),
 	}
 }

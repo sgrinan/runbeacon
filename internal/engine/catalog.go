@@ -47,5 +47,6 @@ func LoadCatalog(directory string) (Catalog, error) {
 }
 
 func isRunbookFile(name string) bool {
-	return strings.HasSuffix(name, ".yaml") || strings.HasSuffix(name, ".yml")
+	ext := strings.ToLower(filepath.Ext(name))
+	return ext == ".yaml" || ext == ".yml"
 }

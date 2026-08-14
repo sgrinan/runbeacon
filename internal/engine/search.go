@@ -32,15 +32,12 @@ func matchesRunbook(runbook models.Runbook, query string) bool {
 		fields = append(fields, symptom.Keywords...)
 	}
 
-	for _, step := range runbook.Steps {
-		fields = append(fields, step.Title, step.Description, step.Command)
-	}
-
 	for _, field := range fields {
 		if strings.Contains(normalize(field), query) {
 			return true
 		}
 	}
+
 	return false
 }
 

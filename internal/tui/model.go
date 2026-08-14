@@ -19,16 +19,25 @@ type Model struct {
 
 // NewModel creates a model with all runbooks initially visible.
 func NewModel(catalog engine.Catalog) Model {
+	return Model{
+		list:     newRunbookList(catalog),
+		viewport: viewport.New(),
+	}
+}
+
+// Init initializes the Bubble Tea model.
+func (model Model) Init() tea.Cmd {
+	return nil
+}
+
+func newRunbookList(catalog engine.Catalog) list.Model {
 	items := make([]list.Item, 0, len(catalog.Runbooks))
 
 	for _, runbook := range catalog.Runbooks {
-		items = append(items, runbookItem{
-			runbook: runbook,
-		})
+		items = append(items, runbookItem{runbook: runbook})
 	}
 
 	runbookList := list.New(items, list.NewDefaultDelegate(), 0, 0)
-
 	runbookList.Title = "Runbeacon"
 	runbookList.Filter = filterRunbooks
 
@@ -45,14 +54,5 @@ func NewModel(catalog engine.Catalog) Model {
 		return []key.Binding{openKey}
 	}
 
-	return Model{
-		selected: nil,
-		list:     runbookList,
-		viewport: viewport.New(),
-	}
-}
-
-// Init initializes the Bubble Tea model.
-func (model Model) Init() tea.Cmd {
-	return nil
+	return runbookList
 }

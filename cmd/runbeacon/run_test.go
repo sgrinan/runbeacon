@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/sgrinan/runbeacon/internal/engine"
-	"github.com/sgrinan/runbeacon/internal/models"
 	"github.com/sgrinan/runbeacon/internal/testutil"
 )
 
@@ -21,14 +20,12 @@ func TestRun(t *testing.T) {
 			name:       "unknown command",
 			args:       []string{"banana"},
 			wantCode:   2,
-			wantStdout: "",
 			wantStderr: "unknown command: banana\n",
 		},
 		{
 			name:       "search without query",
 			args:       []string{"search"},
 			wantCode:   2,
-			wantStdout: "",
 			wantStderr: "usage: runbeacon search <query>\n",
 		},
 		{
@@ -36,14 +33,11 @@ func TestRun(t *testing.T) {
 			args:       []string{"search", "crash"},
 			wantCode:   0,
 			wantStdout: "kubernetes.pod.crashloopbackoff\tPod in CrashLoopBackOff\n",
-			wantStderr: "",
 		},
 	}
 
 	catalog := engine.Catalog{
-		Runbooks: []models.Runbook{
-			testutil.ValidRunbook(),
-		},
+		Runbooks: testutil.Runbooks(),
 	}
 
 	for _, tt := range tests {
@@ -52,17 +46,10 @@ func TestRun(t *testing.T) {
 			var stderr bytes.Buffer
 
 			gotCode := run(tt.args, &stdout, &stderr, catalog)
-			if gotCode != tt.wantCode {
-				t.Fatalf("run() code = %d, want %d", gotCode, tt.wantCode)
-			}
 
-			if stdout.String() != tt.wantStdout {
-				t.Fatalf("run() stdout = %q, want %q", stdout.String(), tt.wantStdout)
-			}
-
-			if stderr.String() != tt.wantStderr {
-				t.Fatalf("run() stderr = %q, want %q", stderr.String(), tt.wantStderr)
-			}
+			testutil.Equal(t, gotCode, tt.wantCode, "run() code")
+			testutil.EqualString(t, stdout.String(), tt.wantStdout, "run() stdout")
+			testutil.EqualString(t, stderr.String(), tt.wantStderr, "run() stderr")
 		})
 	}
 }

@@ -1,14 +1,13 @@
 package tui
 
 import (
-	"strings"
 	"testing"
 
 	"github.com/sgrinan/runbeacon/internal/testutil"
 )
 
 func TestItemFilterValueIncludesSearchableFields(t *testing.T) {
-	item := runbookItem{runbook: testutil.ValidRunbook()}
+	item := runbookItem{runbook: testutil.CrashLoopBackOffRunbook()}
 
 	got := item.FilterValue()
 
@@ -23,8 +22,6 @@ func TestItemFilterValueIncludesSearchableFields(t *testing.T) {
 	}
 
 	for _, term := range wantTerms {
-		if !strings.Contains(got, term) {
-			t.Fatalf("FilterValue() = %q, want to contain %q", got, term)
-		}
+		testutil.StringContains(t, got, term, "FilterValue()")
 	}
 }

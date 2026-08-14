@@ -1,7 +1,6 @@
 package engine
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/sgrinan/runbeacon/internal/testutil"
@@ -11,15 +10,12 @@ func TestLoadCatalogValidDirectory(t *testing.T) {
 	catalog, err := LoadCatalog("testdata/validYAML")
 	testutil.NoError(t, err, "LoadCatalog()")
 
-	if len(catalog.Runbooks) != 1 {
-		t.Fatalf("LoadCatalog() runbook count = %d, want 1", len(catalog.Runbooks))
-	}
+	testutil.Equal(t, len(catalog.Runbooks), 1, "LoadCatalog() runbook count")
 
-	want := testutil.ValidRunbook()
+	want := testutil.CrashLoopBackOffRunbook()
 	got := catalog.Runbooks[0]
-	if !reflect.DeepEqual(got, want) {
-		t.Fatalf("LoadCatalog() = %#v, want %#v", got, want)
-	}
+
+	testutil.DeepEqual(t, got, want, "LoadCatalog()")
 }
 
 func TestLoadCatalogMissingDirectory(t *testing.T) {
@@ -41,29 +37,24 @@ func TestLoadCatalogIgnoresNonRunbookFiles(t *testing.T) {
 	catalog, err := LoadCatalog("testdata/mixed")
 	testutil.NoError(t, err, "LoadCatalog()")
 
-	if len(catalog.Runbooks) != 1 {
-		t.Fatalf("LoadCatalog() runbook count = %d, want 1", len(catalog.Runbooks))
-	}
+	testutil.Equal(t, len(catalog.Runbooks), 1, "LoadCatalog() runbook count")
 
-	want := testutil.ValidRunbook()
+	want := testutil.CrashLoopBackOffRunbook()
 	got := catalog.Runbooks[0]
-	if !reflect.DeepEqual(got, want) {
-		t.Fatalf("LoadCatalog() = %#v, want %#v", got, want)
-	}
+
+	testutil.DeepEqual(t, got, want, "LoadCatalog()")
 }
 
 func TestLoadCatalogLoadsMultipleRunbooks(t *testing.T) {
 	catalog, err := LoadCatalog("testdata/multiple")
 	testutil.NoError(t, err, "LoadCatalog()")
 
-	if len(catalog.Runbooks) != 3 {
-		t.Fatalf("LoadCatalog() runbook count = %d, want 3", len(catalog.Runbooks))
-	}
+	testutil.Equal(t, len(catalog.Runbooks), 3, "LoadCatalog() runbook count")
 
-	gotIDs := make(map[string]bool)
+	gotIDs := make(map[string]struct{})
 
 	for _, runbook := range catalog.Runbooks {
-		gotIDs[runbook.ID] = true
+		gotIDs[runbook.ID] = struct{}{}
 	}
 
 	wantIDs := []string{
@@ -73,7 +64,7 @@ func TestLoadCatalogLoadsMultipleRunbooks(t *testing.T) {
 	}
 
 	for _, id := range wantIDs {
-		if !gotIDs[id] {
+		if _, ok := gotIDs[id]; !ok {
 			t.Errorf("LoadCatalog() missing runbook %q", id)
 		}
 	}

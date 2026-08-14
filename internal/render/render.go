@@ -10,6 +10,7 @@ import (
 // Runbook renders a runbook as plain text.
 func Runbook(runbook models.Runbook) string {
 	var builder strings.Builder
+
 	fmt.Fprintf(&builder, "%s\n", runbook.Title)
 	fmt.Fprintf(&builder, "%s\n\n", runbook.ID)
 	fmt.Fprintf(&builder, "%s\n\n", runbook.Description)
@@ -18,8 +19,7 @@ func Runbook(runbook models.Runbook) string {
 
 	for _, symptom := range runbook.Symptoms {
 		fmt.Fprintf(&builder, "- %s\n", symptom.Name)
-		fmt.Fprintf(&builder, "  Keywords: ")
-		fmt.Fprintf(&builder, "%s\n\n", strings.Join(symptom.Keywords, ", "))
+		fmt.Fprintf(&builder, "  Keywords: %s\n\n", strings.Join(symptom.Keywords, ", "))
 	}
 
 	builder.WriteString("Steps:\n")

@@ -2,7 +2,6 @@ package parser
 
 import (
 	"os"
-	"reflect"
 	"testing"
 
 	"github.com/sgrinan/runbeacon/internal/testutil"
@@ -15,11 +14,9 @@ func TestParseValidYAML(t *testing.T) {
 	got, err := Parse(data)
 	testutil.NoError(t, err, "Parse()")
 
-	want := testutil.ValidRunbook()
+	want := testutil.CrashLoopBackOffRunbook()
 
-	if !reflect.DeepEqual(got, want) {
-		t.Fatalf("Parse() = %#v, want %#v", got, want)
-	}
+	testutil.DeepEqual(t, got, want, "Parse()")
 }
 
 func TestParseInvalidYAML(t *testing.T) {
@@ -31,14 +28,12 @@ func TestParseInvalidYAML(t *testing.T) {
 }
 
 func TestLoadValidFile(t *testing.T) {
-	want := testutil.ValidRunbook()
-
 	got, err := Load("testdata/validYAML.yaml")
 	testutil.NoError(t, err, "Load()")
 
-	if !reflect.DeepEqual(got, want) {
-		t.Fatalf("Load() = %#v, want %#v", got, want)
-	}
+	want := testutil.CrashLoopBackOffRunbook()
+
+	testutil.DeepEqual(t, got, want, "Load()")
 }
 
 func TestLoadMissingFile(t *testing.T) {

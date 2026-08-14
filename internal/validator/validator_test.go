@@ -14,9 +14,7 @@ func TestValidate(t *testing.T) {
 		wantErr string
 	}{
 		{
-			name:    "valid runbook",
-			modify:  nil,
-			wantErr: "",
+			name: "valid runbook",
 		},
 		{
 			name: "missing ID",
@@ -99,7 +97,7 @@ func TestValidate(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			runbook := testutil.ValidRunbook()
+			runbook := testutil.CrashLoopBackOffRunbook()
 
 			if tt.modify != nil {
 				tt.modify(&runbook)

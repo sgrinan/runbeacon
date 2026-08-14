@@ -19,11 +19,11 @@ func (item runbookItem) Description() string {
 }
 
 func (item runbookItem) FilterValue() string {
-	var terms []string
-
-	terms = append(terms, item.runbook.Title)
-	terms = append(terms, item.runbook.ID)
-	terms = append(terms, item.runbook.Description)
+	terms := []string{
+		item.runbook.Title,
+		item.runbook.ID,
+		item.runbook.Description,
+	}
 
 	for _, symptom := range item.runbook.Symptoms {
 		terms = append(terms, symptom.Name)

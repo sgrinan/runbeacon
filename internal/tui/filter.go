@@ -13,9 +13,7 @@ func filterRunbooks(term string, targets []string) []list.Rank {
 
 	for i, target := range targets {
 		if strings.Contains(strings.ToLower(target), term) {
-			ranks = append(ranks, list.Rank{
-				Index: i,
-			})
+			ranks = append(ranks, list.Rank{Index: i})
 		}
 	}
 

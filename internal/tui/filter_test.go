@@ -4,6 +4,8 @@ import (
 	"testing"
 
 	"charm.land/bubbles/v2/list"
+
+	"github.com/sgrinan/runbeacon/internal/testutil"
 )
 
 func TestFilterRunbooksMatchesSubstringCaseInsensitive(t *testing.T) {
@@ -14,16 +16,7 @@ func TestFilterRunbooksMatchesSubstringCaseInsensitive(t *testing.T) {
 	}
 
 	got := filterRunbooks("container", targets)
-
 	want := []list.Rank{{Index: 1}, {Index: 2}}
 
-	if len(got) != len(want) {
-		t.Fatalf("filterRunbooks() result count = %d, want %d", len(got), len(want))
-	}
-
-	for i := range want {
-		if got[i].Index != want[i].Index {
-			t.Fatalf("filterRunbooks() result[%d].Index = %d, want %d", i, got[i].Index, want[i].Index)
-		}
-	}
+	testutil.DeepEqual(t, got, want, "filterRunbooks()")
 }

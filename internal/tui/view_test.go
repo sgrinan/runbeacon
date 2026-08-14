@@ -7,7 +7,7 @@ import (
 )
 
 func TestRunbookView(t *testing.T) {
-	runbook := testutil.ValidRunbook()
+	runbook := testutil.CrashLoopBackOffRunbook()
 
 	model := Model{
 		selected: &runbook,
@@ -31,7 +31,5 @@ Steps:
 
 	got := model.runbookView()
 
-	if got != want {
-		t.Fatalf("runbookView() = %q, want %q", got, want)
-	}
+	testutil.EqualString(t, got, want, "runbookView()")
 }
