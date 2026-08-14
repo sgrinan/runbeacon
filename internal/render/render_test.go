@@ -22,6 +22,7 @@ Steps:
 1. Describe pod
    Inspect pod events and container state.
    $ kubectl describe pod
+
 `
 
 	got := Runbook(runbook)
@@ -47,6 +48,7 @@ Symptoms:
 Steps:
 1. Describe pod
    Inspect pod events and container state.
+
 `
 
 	got := Runbook(runbook)

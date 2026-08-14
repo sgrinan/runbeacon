@@ -27,9 +27,12 @@ func Runbook(runbook models.Runbook) string {
 	for i, step := range runbook.Steps {
 		fmt.Fprintf(&builder, "%d. %s\n", i+1, step.Title)
 		fmt.Fprintf(&builder, "   %s\n", step.Description)
+
 		if step.Command != "" {
 			fmt.Fprintf(&builder, "   $ %s\n", step.Command)
 		}
+
+		builder.WriteString("\n")
 	}
 
 	return builder.String()

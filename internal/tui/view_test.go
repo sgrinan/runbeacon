@@ -26,6 +26,7 @@ Steps:
 1. Describe pod
    Inspect pod events and container state.
    $ kubectl describe pod
+
 `
 
 	got := model.runbookView()
