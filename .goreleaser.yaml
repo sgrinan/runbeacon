@@ -32,6 +32,8 @@ changelog:
     exclude:
       - "^docs:"
       - "^test:"
-      - "^chore:"
       - "^ci:"
       - "^refactor:"
+      - "^chore:"
+      - "^chore\\("
+      - "^Merge pull request"
